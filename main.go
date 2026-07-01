@@ -7,7 +7,8 @@ import (
 
 func main() {
 	// init hashmap
-	hm := ds.NewHashMap(nil)
+	s := 5
+	hm := ds.NewHashMap(&s)
 	hm.Set("name", "Bob")
 	hm.Set("age","10")
 	hm.Set("location", "Berlin")

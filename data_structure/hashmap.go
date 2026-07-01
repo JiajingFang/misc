@@ -32,6 +32,11 @@ func NewHashMap(size *int) *HashMap {
 	}
 }
 
+
+//a =     1 0 1 0
+// a>>2 = 0 0 1 0
+//        1 0 0 0
+
 func (h *HashMap) getHash (key string) uint32 {
 	// get the HashValue from hash/fnv then apply Hash Disturbance Function
 	hV := fnv.New32a()
@@ -40,7 +45,7 @@ func (h *HashMap) getHash (key string) uint32 {
 }
 
 func (h *HashMap) getIndex (hash uint32, length uint32) uint32 {
-	return (length - 1) & hash
+	return (length - 1) & hash // simialr to  hash mod (length-1)
 }
 
 func (h *HashMap) Set (key, value string)  {
@@ -50,17 +55,14 @@ func (h *HashMap) Set (key, value string)  {
 	hV := h.getHash(key)
 	id := h.getIndex(hV, uint32(h.bucketSize))
 
-	exist := false
 	for _, kvPair := range h.buckets[id] {
 		if kvPair.key == key {
 			kvPair.value = value
-			exist = true
-			break
+			return
 		}
 	}
-	if !exist {
-		h.buckets[id] = append(h.buckets[id], keyValuePair{key: key, value: value})
-	}
+
+	h.buckets[id] = append(h.buckets[id], keyValuePair{key: key, value: value})
 }
 
 func (h *HashMap) Get (key string) (*string) {
@@ -78,3 +80,6 @@ func (h *HashMap) Get (key string) (*string) {
 	return nil
 
 }
+//hash functions research
+// op for Hash Disturbance Function
+// write test case for performance
