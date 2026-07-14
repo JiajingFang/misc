@@ -12,7 +12,9 @@ func main() {
 	hm.Set("name", "Bob")
 	hm.Set("age","10")
 	hm.Set("location", "Berlin")
-
+	hm.PrintHashValues("name")
+	hm.PrintHashValues("age")
+	hm.PrintHashValues("location")
 	fmt.Printf("value of key \"name\": %s\n", *hm.Get("name"))
 	fmt.Printf("value of key \"age\": %s\n", *hm.Get("age"))
 	fmt.Printf("value of key \"location\": %s\n", *hm.Get("location"))

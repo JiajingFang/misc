@@ -1,7 +1,9 @@
 package data_structure
 
 import (
+	"crypto/sha256"
 	"hash/fnv"
+	"hash/maphash"
 	"math"
 )
 
@@ -36,6 +38,25 @@ func NewHashMap(size *int) *HashMap {
 //a =     1 0 1 0
 // a>>2 = 0 0 1 0
 //        1 0 0 0
+
+func(h *HashMap) PrintHashValues (key string) {
+	println("Start to print hash values for key: ", key)
+	// maphash value
+	var mh maphash.Hash
+	mh.Write([]byte(key))
+	println("maphash value: (fastest, change every run)", mh.Sum64())
+
+	// fnv hash value
+	hV := fnv.New32a()
+	hV.Write([]byte(key))
+	println("fnv hash value: ", hV.Sum32())
+
+	// SHA256 hash value
+	s := sha256.New()
+	s.Write([]byte(key))
+	println("SHA256 hash value: ", s.Sum(nil))
+}
+
 
 func (h *HashMap) getHash (key string) uint32 {
 	// get the HashValue from hash/fnv then apply Hash Disturbance Function
