@@ -35,10 +35,6 @@ func NewHashMap(size *int) *HashMap {
 }
 
 
-//a =     1 0 1 0
-// a>>2 = 0 0 1 0
-//        1 0 0 0
-
 func(h *HashMap) PrintHashValues (key string) {
 	println("Start to print hash values for key: ", key)
 	// maphash value
