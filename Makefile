@@ -1,0 +1,3 @@
+.PHONY: benchmarktest
+benchmarktest: 
+	go test -bench=. ./...
