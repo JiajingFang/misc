@@ -1,5 +1,6 @@
 package data_structure
 
+
 // https://pages.cs.wisc.edu/~jinc/
 // https://zhuanlan.zhihu.com/p/79980618
 // 5 rules in RBT
@@ -35,3 +36,50 @@ func NewRedBlackTree() *RedBlackTree {
 	return &RedBlackTree{}
 }
 
+func (rbt *RedBlackTree) Search(key int) *Node {
+	// same as a normal BST
+	root := rbt.root 
+	for root != nil {
+		if key == root.key {
+			return root
+		} else if key < root.key {
+			root = root.left
+		} else {
+			root = root.right
+		}
+	}
+	return nil
+}
+
+func (rbt *RedBlackTree) Insert(key int, value string) *Node{
+	// same as a normal BST, mark as red color=true 
+	// use insert_fixup(node)
+
+	nodeToInsert := Node{
+		key: key,
+		value: value,
+		color: true,
+	}
+
+	if rbt.root == nil {
+		rbt.root = &nodeToInsert
+	}
+	current := rbt.root
+	for current != nil {
+		if current.key > key && current.left != nil {
+			current = current.left
+		} else if current.key < key && current.right != nil {
+			current = current.right
+		} else {
+			break
+		}
+	}
+
+	if current.key > key {
+		current.left = &nodeToInsert
+	} else {
+		current.right = &nodeToInsert
+	}
+	// insert_fixup
+	return rbt.root
+}
