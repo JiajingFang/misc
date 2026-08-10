@@ -1,5 +1,8 @@
 package data_structure
 
+import (
+	"fmt"
+)
 
 // https://pages.cs.wisc.edu/~jinc/
 // https://zhuanlan.zhihu.com/p/79980618
@@ -20,66 +23,123 @@ package data_structure
 // Delete	          O(log n)
 
 type RedBlackTree struct {
-	root *Node
+	Root *Node
 }
 
 type Node struct {
-	key    int
-	value  string
-	color  bool // true for red, false for black
-	left   *Node
-	right  *Node
-	parent *Node
+	Key    int
+	Value  string
+	Color  bool // true for red, false for black
+	Left   *Node
+	Right  *Node
+	Parent *Node
 }
 
-func NewRedBlackTree() *RedBlackTree {
-	return &RedBlackTree{}
+func NewRedBlackTree(root *Node) *RedBlackTree {
+	return &RedBlackTree{
+		Root: &Node{
+			Key: root.Key,
+			Value: root.Value,
+			Color: root.Color,
+			Left: root.Left,
+			Right: root.Right,
+			Parent: root.Parent,
+		},
+	}
 }
 
 func (rbt *RedBlackTree) Search(key int) *Node {
 	// same as a normal BST
-	root := rbt.root 
+	root := rbt.Root 
 	for root != nil {
-		if key == root.key {
+		if key == root.Key {
 			return root
-		} else if key < root.key {
-			root = root.left
+		} else if key < root.Key {
+			root = root.Left
 		} else {
-			root = root.right
+			root = root.Right
 		}
 	}
 	return nil
 }
 
-func (rbt *RedBlackTree) Insert(key int, value string) *Node{
+func (rbt *RedBlackTree) Insert(key int, Value string) *Node{
 	// same as a normal BST, mark as red color=true 
 	// use insert_fixup(node)
 
 	nodeToInsert := Node{
-		key: key,
-		value: value,
-		color: true,
+		Key: key,
+		Value: Value,
+		Color: true,
 	}
 
-	if rbt.root == nil {
-		rbt.root = &nodeToInsert
+	if rbt.Root == nil {
+		rbt.Root = &nodeToInsert
 	}
-	current := rbt.root
+	current := rbt.Root
 	for current != nil {
-		if current.key > key && current.left != nil {
-			current = current.left
-		} else if current.key < key && current.right != nil {
-			current = current.right
+		if current.Key > key && current.Left != nil {
+			current = current.Left
+		} else if current.Key < key && current.Right != nil {
+			current = current.Right
 		} else {
 			break
 		}
 	}
 
-	if current.key > key {
-		current.left = &nodeToInsert
+	if current.Key > key {
+		current.Left = &nodeToInsert
 	} else {
-		current.right = &nodeToInsert
+		current.Right = &nodeToInsert
 	}
 	// insert_fixup
-	return rbt.root
+	return rbt.Root
+}
+
+
+func PrintLevelByLevel (root *Node) {
+	var result [][]string 
+	if root == nil {
+		fmt.Print("empty tree")
+		return 
+	}
+
+	queue := []*Node{root}
+	for len(queue) > 0 {
+		levelSize := len(queue)
+		var currentLevel []string 
+		
+
+		for i := 0; i < levelSize; i++ {
+			// Dequeue
+			// Shadowing! Creates a NEW 'queue' inside this block.
+			// The outer 'queue' remains untouched!
+			// queue := queue[1:]
+			node := queue[0]
+			queue = queue[1:]
+
+			// Add node Value to current level list
+			currentLevel = append(currentLevel, node.Value)
+
+			// Equeue Left and Right childer 
+			if node.Left != nil {
+				queue = append(queue, node.Left)
+			}
+			if node.Right != nil {
+				queue = append(queue, node.Right)
+			}
+		}
+
+		// store the completed level into result
+		result = append(result, currentLevel)
+	}
+
+	fmt.Println("-----print RBT level by level------")
+	for _, level := range result{
+		fmt.Println("-----------")
+		for _, node := range level {
+			fmt.Print(node)
+		}
+		fmt.Println()
+	}
 }

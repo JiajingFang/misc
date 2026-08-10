@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	ds "github.com/JiajingFang/misc/data_structure"
 )
 
@@ -24,4 +25,25 @@ func main() {
 	} else {
 		fmt.Println("fail: no existing key has value")
 	}
+
+	// init rb tree
+	leftChild := ds.Node{
+		Key: 2,
+		Value: "2",
+		Color: false,
+	}
+	rightChild := ds.Node{
+		Key: 3,
+		Value: "3",
+		Color: false,
+	}
+	root := ds.Node{
+		Key: 1,
+		Value: "1",
+		Color: true,
+		Left: &leftChild,
+		Right: &rightChild,
+	}
+	rbt := ds.NewRedBlackTree(&root)
+	ds.PrintLevelByLevel(rbt.Root)
 }
