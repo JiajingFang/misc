@@ -63,7 +63,7 @@ func (rbt *RedBlackTree) Search(key int) *Node {
 	return nil
 }
 
-func (rbt *RedBlackTree) Insert(key int, Value string) *Node{
+func (rbt *RedBlackTree) Insert(key int, Value string) {
 	// same as a normal BST, mark as red color=true 
 	// use insert_fixup(node)
 
@@ -74,7 +74,9 @@ func (rbt *RedBlackTree) Insert(key int, Value string) *Node{
 	}
 
 	if rbt.Root == nil {
+		nodeToInsert.Color = false
 		rbt.Root = &nodeToInsert
+		return 
 	}
 	current := rbt.Root
 	for current != nil {
@@ -93,7 +95,11 @@ func (rbt *RedBlackTree) Insert(key int, Value string) *Node{
 		current.Right = &nodeToInsert
 	}
 	// insert_fixup
-	return rbt.Root
+	return 
+}
+
+func (rbt *RedBlackTree) insert_fixup() {
+	
 }
 
 
