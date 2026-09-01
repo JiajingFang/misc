@@ -89,17 +89,92 @@ func (rbt *RedBlackTree) Insert(key int, Value string) {
 		}
 	}
 
+	nodeToInsert.Parent = current
 	if current.Key > key {
 		current.Left = &nodeToInsert
 	} else {
 		current.Right = &nodeToInsert
 	}
-	// insert_fixup
-	return 
+	rbt.insert_fixup(&nodeToInsert)
 }
 
-func (rbt *RedBlackTree) insert_fixup() {
-	
+func isRed(n *Node) bool {
+	return n != nil && n.Color
+}
+
+func (rbt *RedBlackTree) leftRotate(x *Node) {
+	y := x.Right
+	x.Right = y.Left
+	if y.Left != nil {
+		y.Left.Parent = x
+	}
+	y.Parent = x.Parent
+	if x.Parent == nil {
+		rbt.Root = y
+	} else if x == x.Parent.Left {
+		x.Parent.Left = y
+	} else {
+		x.Parent.Right = y
+	}
+	y.Left = x
+	x.Parent = y
+}
+
+func (rbt *RedBlackTree) rightRotate(x *Node) {
+	y := x.Left
+	x.Left = y.Right
+	if y.Right != nil {
+		y.Right.Parent = x
+	}
+	y.Parent = x.Parent
+	if x.Parent == nil {
+		rbt.Root = y
+	} else if x == x.Parent.Right {
+		x.Parent.Right = y
+	} else {
+		x.Parent.Left = y
+	}
+	y.Right = x
+	x.Parent = y
+}
+
+func (rbt *RedBlackTree) insert_fixup(z *Node) {
+	for z.Parent != nil && isRed(z.Parent) {
+		if z.Parent == z.Parent.Parent.Left {
+			uncle := z.Parent.Parent.Right
+			if isRed(uncle) {
+				z.Parent.Color = false
+				uncle.Color = false
+				z.Parent.Parent.Color = true
+				z = z.Parent.Parent
+			} else {
+				if z == z.Parent.Right {
+					z = z.Parent
+					rbt.leftRotate(z)
+				}
+				z.Parent.Color = false
+				z.Parent.Parent.Color = true
+				rbt.rightRotate(z.Parent.Parent)
+			}
+		} else {
+			uncle := z.Parent.Parent.Left
+			if isRed(uncle) {
+				z.Parent.Color = false
+				uncle.Color = false
+				z.Parent.Parent.Color = true
+				z = z.Parent.Parent
+			} else {
+				if z == z.Parent.Left {
+					z = z.Parent
+					rbt.rightRotate(z)
+				}
+				z.Parent.Color = false
+				z.Parent.Parent.Color = true
+				rbt.leftRotate(z.Parent.Parent)
+			}
+		}
+	}
+	rbt.Root.Color = false
 }
 
 
